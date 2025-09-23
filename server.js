@@ -22,7 +22,7 @@ let pool = null;
 function conectarBD() {
   if (!pool) {
     pool = new Pool({
-      connectionString: process.env.URL_BD, // A URL de conexão ao banco de dados será carregada das variáveis de ambiente
+      connectionString: process.env.URL_BD, // Pega a URL do banco da variável de ambiente
     });
   }
   return pool;
@@ -36,7 +36,7 @@ app.get("/", async (req, res) => {
 
   try {
     const db = conectarBD(); // Conecta ao banco de dados
-    await db.query("SELECT 1"); // Teste de conexão
+    await db.query("SELECT 1"); // Teste simples para garantir conexão
   } catch (e) {
     dbStatus = `Erro ao conectar ao banco de dados: ${e.message}`;
   }
@@ -52,14 +52,12 @@ app.get("/", async (req, res) => {
 app.get("/questoes", async (req, res) => {
   console.log("Rota GET /questoes solicitada");
 
-  let dbStatus = "ok";  // Status da conexão com o banco
-
   try {
     const db = conectarBD(); // Conecta ao banco de dados
-    const resultado = await db.query("SELECT * FROM questoes");  // Consulta todas as questões no banco de dados
-    const dados = resultado.rows; // Obtém os dados das questões
+    const resultado = await db.query("SELECT * FROM questoes");  // Consulta todas as questões no banco
+    const dados = resultado.rows; // Extrai os dados
 
-    res.json(dados);  // Retorna as questões no formato JSON
+    res.json(dados);  // Retorna os dados em JSON
   } catch (e) {
     console.error("Erro ao buscar questões:", e);
     res.status(500).json({
